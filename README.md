@@ -1,25 +1,28 @@
 # XP2BIT — GitHub Pages Website
 
-This repository contains the static XP2BIT landing page and dashboard frontend. It is separate from the Python bot and FastAPI backend.
+This repository contains the static XP2BIT landing page and a dashboard shell. It is separate from the Python bot and FastAPI backend.
+
+## No fake statistics
+
+The dashboard does not contain hard-coded coins, members, claims, servers, or scheduled events. Until `api-config.js` points to a reachable backend and authentication is implemented, it shows `API not connected`, empty states, and disabled controls.
 
 ## Publish on GitHub Pages
 
 1. Create a GitHub repository, for example `XP2BIT-site`.
 2. Upload the **contents** of this folder to the repository root. `index.html` must be in the root.
 3. Open **Settings → Pages**.
-4. Select **GitHub Actions** as the source.
-5. Push to the `main` branch or run the `Deploy static site to GitHub Pages` workflow from the Actions tab.
+4. Select **GitHub Actions** as the source, or select branch `main` and folder `/ (root)`.
+5. Push to the `main` branch or run the Pages workflow.
 6. Open the URL shown by GitHub, usually `https://YOUR_USERNAME.github.io/XP2BIT-site/`.
 
-## Backend connection
+## Connect the real backend
 
-GitHub Pages can serve only static files. It cannot run Python, FastAPI, a Discord bot, a scheduler, or a database. The XP2BIT backend must run separately on a computer or public server:
+Edit `api-config.js` before publishing:
 
-```text
-GitHub Pages frontend → HTTPS FastAPI backend → database
-                                      ↘ Discord bot
+```javascript
+window.XP2BIT_API_URL = "https://api.example.com";
 ```
 
-For local development, the backend runs at `http://127.0.0.1:8000` using `start_api.bat` from the bot archive. A public GitHub Pages website cannot call a user's local `127.0.0.1`; deploy the backend on a public HTTPS domain before enabling live dashboard operations.
+GitHub Pages can serve only static files. It cannot run Python, FastAPI, a Discord bot, a scheduler, or a database. The backend must run on the user's computer during development or on a public HTTPS server for a live site.
 
-The dashboard currently includes a working UI preview and safe placeholder notifications. Replace the placeholder API configuration with the public API URL, then add server-side Discord OAuth2 and permission checks before exposing admin mutations.
+The dashboard must receive its server list and statistics from authenticated API responses. Never put the Discord bot token or OAuth client secret in this repository.
